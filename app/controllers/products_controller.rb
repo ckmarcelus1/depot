@@ -5,6 +5,8 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     @products = Product.all
+    logger.debug("----- Number of products is #{@products.size}")
+    logger.debug("----- Latest Product: #{Product.latest}")
   end
 
   # GET /products/1

@@ -21,10 +21,10 @@ class Product < ActiveRecord::Base #these are basically testes against the datab
 	validates :title, uniqueness: true
 	validates :image_url, allow_blank: true, format: { with: %r{\.(gif|jpg|png)\Z}i,
 		message: 'must be a URL for GIF, JPG or PNG image.'}
-end
 
+	def self.latest
+		Product.order( :updated_at).last
+	end
 
-def self.latest
-	Product.order( :updated_at).last
 end
 
