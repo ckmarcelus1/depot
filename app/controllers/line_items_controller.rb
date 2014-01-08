@@ -24,6 +24,8 @@ class LineItemsController < ApplicationController
   def edit
   end
 
+  
+  
   # POST /line_items
   # POST /line_items.json
   def create
