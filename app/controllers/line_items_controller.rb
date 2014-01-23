@@ -1,4 +1,3 @@
-
 class LineItemsController < ApplicationController
   include CurrentCart
   before_action :set_cart, only: [:create]
@@ -33,13 +32,11 @@ class LineItemsController < ApplicationController
     respond_to do |format|
       if @line_item.save
         format.html { redirect_to store_url }
-        format.js   { @current_item = @line_item }
-        format.json { render action: 'show',
-          status: :created, location: @line_item }
+                format.js   { @current_item = @line_item }
+        format.json { render action: 'show', status: :created, location: @line_item }
       else
         format.html { render action: 'new' }
-        format.json { render json: @line_item.errors,
-          status: :unprocessable_entity }
+        format.json { render json: @line_item.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -74,10 +71,8 @@ class LineItemsController < ApplicationController
       @line_item = LineItem.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white
-    # list through.
+    # Never trust parameters from the scary internet, only allow the white list through.
     def line_item_params
       params.require(:line_item).permit(:product_id)
     end
-  #...
 end
