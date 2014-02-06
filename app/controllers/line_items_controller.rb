@@ -1,7 +1,9 @@
+
+
 class LineItemsController < ApplicationController
   include CurrentCart
-  before_action :set_cart, only: [:create]
-  before_action :set_line_item, only: [:show, :edit, :update, :destroy]
+  before_action :set_cart, only: [:create, :decrement]
+  before_action :set_line_item, only: [:show, :edit, :update, :destroy, :decrement]
 
   # GET /line_items
   # GET /line_items.json
@@ -28,6 +30,7 @@ class LineItemsController < ApplicationController
   def create
     product = Product.find(params[:product_id])
     @line_item = @cart.add_product(product.id)
+    #@line_item = @cart.line_items.build(product: product) #LineItem.new(line_item_params)
 
     respond_to do |format|
       if @line_item.save
@@ -55,12 +58,37 @@ class LineItemsController < ApplicationController
     end
   end
 
+ 
+  def decrement
+    
+
+    # 1st way: decrement through method in @cart
+    @line_item = @cart.decrement_line_item_quantity(@line_item.product_id) 
+    # 2nd way: decrement through method in @line_item
+    #@line_item = @cart.line_items.find_by_id(params[:id])
+    #@line_item = @line_item.decrement_quantity(@line_item.id)
+
+    respond_to do |format|
+      if @line_item.save
+        format.html { redirect_to store_path, notice: 'Line item was successfully updated.' }
+        format.js {@current_item = @line_item}
+        format.json { head :ok }
+      else
+        format.html { render action: "edit" }
+        format.js {@current_item = @line_item}
+        format.json { render json: @line_item.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # DELETE /line_items/1
   # DELETE /line_items/1.json
   def destroy
+    #@line_item = LineItem.find(params[:id])
     @line_item.destroy
     respond_to do |format|
-      format.html { redirect_to line_items_url }
+      #format.html { redirect_to line_items_url }
+      format.html { redirect_to store_url, {notice: 'Line item was successfully deleted'} }
       format.json { head :no_content }
     end
   end
